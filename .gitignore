@@ -1,0 +1,14 @@
+# Folder
+.cache
+.vscode
+t[e]?mp
+
+# File
+*.log
+*.sw*
+*.tmp
+.env*
+mockup/*.svg
+skip-*
+
+!.env.example
