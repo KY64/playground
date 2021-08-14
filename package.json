@@ -1,0 +1,42 @@
+{
+  "name": "kymind",
+  "version": "0.0.1",
+  "description": "Personal website",
+  "main": "pages/index.js",
+  "repository": "git@github.com:KY64/playground.git",
+  "author": "ky64 <taurus99@protonmail.com>",
+  "license": "GPL-3",
+  "private": true,
+  "packageManager": "yarn@3.0.1-rc.2",
+  "scripts": {
+    "dev": "next dev",
+    "tsc": "echo \"Typescript $(tsc --version)\" && tsc --noEmit --incremental",
+    "format": "prettier --write src/**/*.[jt]s?(x)",
+    "lint": "next lint & prettier -c src/**/*.[jt]s?(x) & yarn tsc",
+    "lint:fix": "yarn format && eslint --fix \"src/**/*.[jt]s?(x)\" && yarn lint",
+    "build": "yarn lint:fix && next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@chakra-ui/react": "^1.6.6",
+    "@chakra-ui/theme-tools": "^1.1.9",
+    "@emotion/react": "^11",
+    "@emotion/styled": "^11",
+    "framer-motion": "^4",
+    "next": "canary",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  },
+  "devDependencies": {
+    "@next/eslint-plugin-next": "canary",
+    "@types/node": "^16.4.13",
+    "@types/react": "^17.0.17",
+    "@typescript-eslint/parser": "^4.29.1",
+    "eslint": "7.32.0",
+    "eslint-config-next": "canary",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-react": "^7.24.0",
+    "prettier": "2.3.2",
+    "typescript": "^4.3.5"
+  }
+}
