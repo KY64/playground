@@ -1,6 +1,7 @@
 # Folder
 .cache
 .next
+.vim
 .vscode
 .vercel
 .yarn/*
