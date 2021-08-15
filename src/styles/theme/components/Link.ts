@@ -1,0 +1,17 @@
+import { ComponentStyleConfig } from "@chakra-ui/react";
+import { GlobalStyleProps, mode } from "@chakra-ui/theme-tools";
+
+/* Reference for types
+ * https://github.com/chakra-ui/chakra-ui/blob/db51ff6063996a834f1880813673953a3ff5c524/packages/theme/src/theme.types.ts#L80-L82
+ */
+const Link: ComponentStyleConfig = {
+  // Styles for the base style
+  baseStyle: (props: GlobalStyleProps) => ({
+    _focus: {
+      boxShadow: "none"
+    },
+    color: mode("blue", "#FFB380")(props)
+  })
+};
+
+export default Link;
