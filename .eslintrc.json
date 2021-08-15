@@ -1,21 +1,21 @@
 {
-  "extends": [ 
-               "prettier",
-               "plugin:@next/next/core-web-vitals"
-  ],
+  "extends": ["prettier", "plugin:@next/next/core-web-vitals"],
   "plugins": ["@next/next", "react"],
   "rules": {
-    "no-console" : ["warn", { "allow" : ["error"] } ],
-    "quotes" : ["error", "double"],
+    "no-console": ["error", { "allow": ["error"] }],
+    "quotes": ["error", "double"],
     "react/jsx-sort-props": "warn",
-    "semi": ["warn", "always"],
+    "semi": ["error", "always"],
     "sort-keys": ["warn", "asc"],
-    "sort-imports": ["warn", {
-      "allowSeparatedGroups": true,
-      "memberSyntaxSortOrder": ["single", "multiple", "all", "none"]
-    }]
+    "sort-imports": [
+      "warn",
+      {
+        "allowSeparatedGroups": true,
+        "memberSyntaxSortOrder": ["single", "multiple", "all", "none"]
+      }
+    ]
   },
-  "overrides": [ 
+  "overrides": [
     {
       "files": ["**/*.ts?(x)"],
       "parser": "@typescript-eslint/parser",
