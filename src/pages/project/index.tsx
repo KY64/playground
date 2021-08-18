@@ -2,16 +2,17 @@ import React, { useState } from "react";
 
 import Layout from "@/components/Layout";
 
+import { Client } from "@/lib/cms";
 import NextImage from "next/image";
-import { Box, Center, Heading, SimpleGrid, Text } from "@chakra-ui/react";
-
-import type { ColorProps } from "@/styles/theme/color";
-
-let arr: number[] = [];
-const items: number = 6;
-for (let i = 0; i < items; i++) {
-  arr.push(i);
-}
+import Prismic from "@prismicio/client";
+import {
+  Box,
+  Link as ChakraLink,
+  Heading,
+  SimpleGrid,
+  Text
+} from "@chakra-ui/react";
+import { Link, RichText } from "prismic-reactjs";
 
 const Project = (props: any) => (
   <>
@@ -30,26 +31,37 @@ const Project = (props: any) => (
       A collection of project using technology I've learned
     </Heading>
     <SimpleGrid columns={[1, 3]} justifyItems="center" spacing={10}>
-      {arr.map((_, idx) => (
-        <Card key={idx} {...props} />
+      {props.cms.map((result: any, idx: number) => (
+        <ChakraLink
+          href={Link.url(result.data.repository)}
+          key={`project-${idx}`}
+          target="_blank"
+        >
+          <Card
+            description={RichText.asText(result.data.description)}
+            image={Link.url(result.data.image)}
+            project_name={RichText.asText(result.data.project_name)}
+            {...props}
+          />
+        </ChakraLink>
       ))}
     </SimpleGrid>
   </>
 );
 
-const Card = (props: ColorProps) => {
+const Card = (props: any) => {
   const [mouseOver, setMouseOver] = useState<boolean>(false);
-
   return (
     <Box
       _hover={{ background: props.color.contrast.color, cursor: "pointer" }}
       borderColor={props.color.contrast.color}
       borderWidth={2}
       display="relative"
-      height="180px"
+      height="max-content"
       onMouseLeave={() => setMouseOver(false)}
       onMouseOver={() => setMouseOver(true)}
       padding={4}
+      position="relative"
       width="100%"
     >
       <Heading
@@ -61,35 +73,52 @@ const Card = (props: ColorProps) => {
         fontWeight="light"
         textAlign="center"
       >
-        PROJECT NAME
+        {props.project_name}
       </Heading>
-      {mouseOver ? (
+      <Box paddingRight={2} position="absolute">
         <Text
           color={props.color.contrast.inverted}
-          display={mouseOver ? "block" : "none"}
+          display="relative"
           fontSize="sm"
           marginTop={2}
+          opacity={mouseOver ? 1 : 0.001}
         >
-          This is the short description about the project. It will tell you
-          about the purpose, who contributed, and the result.
+          {props.description}
         </Text>
-      ) : (
-        <Center marginY={4}>
-          <NextImage
-            height="100%"
-            src="https://picsum.photos/640/360"
-            width="100%"
-          />
-        </Center>
-      )}
+      </Box>
+      <Box marginTop={4}>
+        <NextImage
+          className="behind"
+          height={360}
+          src={props.image}
+          width={640}
+        />
+      </Box>
     </Box>
   );
 };
 
-const View = () => (
+const View = (props: any) => (
   <Layout>
-    <Project />
+    <Project {...props} />
   </Layout>
 );
+
+export const getStaticProps = async () => {
+  const client = Client();
+  const query = await client.query(
+    Prismic.Predicates.at("document.type", "project"),
+    { orderings: "[document.first_publication_date desc]" }
+  );
+
+  let cms = query.results;
+
+  return {
+    props: {
+      cms
+    },
+    revalidate: 60
+  };
+};
 
 export default View;

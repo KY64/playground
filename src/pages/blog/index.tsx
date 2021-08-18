@@ -2,52 +2,63 @@ import React from "react";
 
 import Layout from "@/components/Layout";
 
+import { Client } from "@/lib/cms";
 import NextImage from "next/image";
-import { Box, Center, Heading, SimpleGrid, Text } from "@chakra-ui/react";
+import NextLink from "next/link";
+import Prismic from "@prismicio/client";
+import { RichText } from "prismic-reactjs";
+import { createSummary } from "@/lib/utils";
+import { Box, Center, Heading, Link, SimpleGrid, Text } from "@chakra-ui/react";
 
 import type { ColorProps } from "@/styles/theme/color";
 
-let arr: number[] = [];
-const items: number = 6;
-for (let i = 0; i < items; i++) {
-  arr.push(i);
+interface PostProps {
+  image: string;
+  summary: string;
+  title: string;
 }
 
-const summary =
-  "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.";
-
-const createSummary = (text: string): string => {
-  const maxlen: number = 200;
-  if (text.length > maxlen) text = text.slice(0, maxlen);
-  text += "....";
-  return text;
+const Blog = (props: any) => {
+  return (
+    <>
+      <Heading as="h1" color={props.color.text.primary} textAlign="center">
+        Blog
+      </Heading>
+      <Heading
+        as="h2"
+        color={props.color.text.primary}
+        fontSize="sm"
+        fontWeight="light"
+        marginBottom={8}
+        marginTop={4}
+        textAlign="center"
+      >
+        Mostly my personal note after learning interesting stuffs
+      </Heading>
+      <SimpleGrid columns={[1, 3]} justifyItems="center" spacing={4}>
+        {props.cms.map((content: any, idx: number) => (
+          <NextLink href={`/blog/${content.uid}`} key={`blog-${idx}`}>
+            <Link
+              _hover={{ textDecoration: "none" }}
+              color={props.color.text.primary}
+            >
+              <Post
+                color={props.color}
+                image={content.data.cover.url}
+                summary={createSummary(
+                  RichText.asText(content.data.description)
+                )}
+                title={RichText.asText(content.data.title)}
+              />
+            </Link>
+          </NextLink>
+        ))}
+      </SimpleGrid>
+    </>
+  );
 };
 
-const Blog = (props: any) => (
-  <>
-    <Heading as="h1" color={props.color.text.primary} textAlign="center">
-      Blog
-    </Heading>
-    <Heading
-      as="h2"
-      color={props.color.text.primary}
-      fontSize="sm"
-      fontWeight="light"
-      marginBottom={8}
-      marginTop={4}
-      textAlign="center"
-    >
-      Mostly my personal note after learning interesting stuffs
-    </Heading>
-    <SimpleGrid columns={[1, 3]} justifyItems="center" spacing={4}>
-      {arr.map((_, idx) => (
-        <Post key={idx} {...props} />
-      ))}
-    </SimpleGrid>
-  </>
-);
-
-const Post = (props: ColorProps) => (
+const Post = (props: ColorProps & PostProps) => (
   <Box
     _hover={{
       borderColor: props.color.contrast.color,
@@ -63,17 +74,13 @@ const Post = (props: ColorProps) => (
     width="100%"
   >
     <Heading as="h4" color={props.color.text.secondary} fontSize="md">
-      BLOG TITLE
+      {props.title}
     </Heading>
-    <Center marginY={2}>
-      <NextImage
-        height="100%"
-        src="https://picsum.photos/640/360"
-        width="100%"
-      />
+    <Center marginY={3}>
+      <NextImage className="img" height={540} src={props.image} width={960} />
     </Center>
     <Text fontSize="sm" lineHeight="1.15" textAlign="justify">
-      {createSummary(summary)}{" "}
+      {props.summary}
       <Text as="span" color={props.color.contrast.color} fontWeight="bold">
         Read More
       </Text>
@@ -81,10 +88,29 @@ const Post = (props: ColorProps) => (
   </Box>
 );
 
-const View = () => (
+const View = (props: any) => (
   <Layout>
-    <Blog />
+    <Blog {...props} />
   </Layout>
 );
+
+// TODO:
+// Change to useSWR for immediate update recent post
+export const getStaticProps = async () => {
+  const client = Client();
+  const post = await client.query(
+    Prismic.Predicates.at("document.type", "post"),
+    { orderings: "[document.first_publication_date desc]", pageSize: 10 }
+  );
+
+  let cms = post.results;
+
+  return {
+    props: {
+      cms
+    },
+    revalidate: 60
+  };
+};
 
 export default View;

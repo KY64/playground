@@ -13,7 +13,8 @@ const styles: Styles = {
     },
     body: {
       bg: mode("#f5f5f5", "#333")(props),
-      color: mode("#555", "#E6E6E6")(props)
+      color: mode("#555", "#E6E6E6")(props),
+      fontFamily: "Open Sans, sans-serif"
     },
     html: {
       height: "100%"

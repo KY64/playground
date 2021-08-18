@@ -15,6 +15,9 @@ interface PropTypes {
   marginX?: number[];
 }
 
+/*
+ * getColor reference https://github.com/chakra-ui/chakra-ui/blob/2418de87ba12cfffda24ebbf32476fb09d3d82bd/packages/theme-tools/src/color.ts#L4-L14
+ */
 const Layout = (props: PropTypes) => {
   const { colorMode } = useColorMode(); // 'light' or 'dark'
   const color: ColorProps = {
