@@ -66,7 +66,7 @@ export const getStaticPaths = async () => {
     return `/blog/${slug}`;
   });
 
-  return { paths, fallback: false };
+  return { fallback: false, paths };
 };
 
 export default View;
