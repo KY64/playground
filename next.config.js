@@ -1,6 +1,10 @@
 module.exports = {
   images: {
-    domains:[ "picsum.photos" ]
+    domains: [
+      "lh3.googleusercontent.com",
+      "picsum.photos",
+      "raw.githubusercontent.com"
+    ]
   },
-  reactStrictMode: true,
+  reactStrictMode: true
 };
