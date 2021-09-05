@@ -5,6 +5,7 @@ import Layout from "@/components/Layout";
 import { Client } from "@/lib/cms";
 import NextImage from "next/image";
 import Prismic from "@prismicio/client";
+import { useMobileView } from "@/lib/utils";
 import { Box, Button, Grid, Heading, Link, Text } from "@chakra-ui/react";
 import { Link as PrismicLink, RichText } from "prismic-reactjs";
 
@@ -39,21 +40,35 @@ const Home = (props: any) => {
   return (
     <>
       <Grid
-        gridColumnGap={14}
-        marginTop={8}
-        marginX={32}
-        templateColumns="1.5fr 3fr"
+        gridColumnGap={useMobileView() ? 0 : 14}
+        marginTop={useMobileView() ? 0 : 8}
+        marginX={useMobileView() ? 0 : 32}
+        templateColumns={useMobileView() ? "" : "1.5fr 3fr"}
       >
-        <Box justifySelf="end">
-          <NextImage
-            alt="Profile picture"
-            className="rounded"
-            height={200}
-            src={data.profile_picture}
-            width={200}
-          />
+        <Box justifySelf={useMobileView() ? "center" : "end"}>
+          {useMobileView() ? (
+            <NextImage
+              alt="Profile picture"
+              className="rounded"
+              height={200}
+              src={data.profile_picture}
+              width={200}
+            />
+          ) : (
+            <NextImage
+              alt="Profile picture"
+              className="rounded"
+              height={200}
+              src={data.profile_picture}
+              width={200}
+            />
+          )}
         </Box>
-        <Box width="32rem">
+        <Box
+          justifySelf={useMobileView() ? "center" : "left"}
+          textAlign={useMobileView() ? "center" : "left"}
+          width={useMobileView() ? "initial" : "32rem"}
+        >
           <Heading as="h1" color={props.color.text.primary} fontWeight="light">
             {data.greetings}
           </Heading>
