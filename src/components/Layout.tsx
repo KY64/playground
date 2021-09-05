@@ -7,6 +7,7 @@ import { getColor } from "@chakra-ui/theme-tools";
 import { chakra, useColorMode } from "@chakra-ui/react";
 
 import customTheme from "@/styles/theme";
+import { useMobileView } from "@/lib/utils";
 
 import type { ColorProps } from "@/styles/theme/color";
 
@@ -37,10 +38,7 @@ const Layout = (props: PropTypes) => {
   return (
     <>
       <Navbar />
-      <chakra.main
-        marginX={props.marginX ? props.marginX : [3, 16]}
-        paddingBottom={40}
-      >
+      <chakra.main marginX={useMobileView() ? 3 : 16} paddingBottom={40}>
         {
           // Inherit color to children
           React.Children.map(props.children, (child) => {
@@ -54,7 +52,7 @@ const Layout = (props: PropTypes) => {
       <Foobar
         height={30}
         iconColor={getColor(customTheme, color.color.text.primary)}
-        padding={8}
+        padding={useMobileView() ? 2 : 8}
         spacing={5}
         width={30}
         {...color}

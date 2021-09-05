@@ -8,6 +8,7 @@ import { serialize } from "next-mdx-remote/serialize";
 import { Client } from "@/lib/cms";
 import Prismic from "@prismicio/client";
 import { RichText } from "prismic-reactjs";
+import { useMobileView } from "@/lib/utils";
 import {
   Box,
   Grid,
@@ -70,7 +71,11 @@ const About = (props: any) => {
   };
 
   return (
-    <Grid gridTemplateColumns="2fr 2fr" justifyItems="center" spacing={10}>
+    <Grid
+      gridTemplateColumns={useMobileView() ? "1fr" : "2fr 2fr"}
+      justifyItems={useMobileView() ? "left" : "center"}
+      spacing={10}
+    >
       <Box>
         <Heading as="h1" color={props.color.text.primary}>
           {data.greetings}
@@ -98,7 +103,7 @@ const About = (props: any) => {
           <Heading as="h3" fontSize="2xl" fontWeight="normal">
             Skill
           </Heading>
-          <SimpleGrid columns={2} spacingX={8}>
+          <SimpleGrid columns={2} spacingX={useMobileView() ? 12 : 8}>
             {data.skill.map((value: any, idx: number) => (
               <Text key={`skill-${idx}`}> {value.skill_name} </Text>
             ))}

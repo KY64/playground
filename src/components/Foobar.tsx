@@ -1,5 +1,6 @@
 import React from "react";
 
+import { BiCodeAlt } from "react-icons/bi";
 import { Link as PrismicLink } from "prismic-reactjs";
 import { swr } from "@/lib/fetch";
 import { Box, HStack, Link, SimpleGrid, Text, Tooltip } from "@chakra-ui/react";
@@ -39,12 +40,13 @@ const Foobar = (props: PropType) => {
     }
   };
   const { data } = swr(
-    "at(document.type, \"foobar\")",
+    "at(document.type,\"foobar\")",
     default_url,
     false,
     true,
     false
   );
+
   const url: AccountURL = data.results ? data.results[0].data : data;
 
   return (
@@ -197,7 +199,7 @@ const Foobar = (props: PropType) => {
         justifySelf="end"
         target="_blank"
       >
-        View source
+        <BiCodeAlt fontSize="16pt" />
       </Link>
     </SimpleGrid>
   );

@@ -5,6 +5,7 @@ import Layout from "@/components/Layout";
 import { Client } from "@/lib/cms";
 import NextImage from "next/image";
 import Prismic from "@prismicio/client";
+import { useMobileView } from "@/lib/utils";
 import {
   Box,
   Link as ChakraLink,
@@ -53,7 +54,10 @@ const Card = (props: any) => {
   const [mouseOver, setMouseOver] = useState<boolean>(false);
   return (
     <Box
-      _hover={{ background: props.color.contrast.color, cursor: "pointer" }}
+      _hover={{
+        background: useMobileView() ? "" : props.color.contrast.color,
+        cursor: "pointer"
+      }}
       borderColor={props.color.contrast.color}
       borderWidth={2}
       display="relative"
@@ -75,13 +79,20 @@ const Card = (props: any) => {
       >
         {props.project_name}
       </Heading>
-      <Box paddingRight={2} position="absolute">
+      <Box
+        paddingRight={2}
+        position={useMobileView() ? "relative" : "absolute"}
+      >
         <Text
-          color={props.color.contrast.inverted}
+          color={
+            useMobileView()
+              ? props.color.contrast.color
+              : props.color.contrast.inverted
+          }
           display="relative"
           fontSize="sm"
           marginTop={2}
-          opacity={mouseOver ? 1 : 0.001}
+          opacity={useMobileView() ? 1 : mouseOver ? 1 : 0.001}
         >
           {props.description}
         </Text>

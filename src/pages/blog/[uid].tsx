@@ -8,6 +8,7 @@ import { MDXRemote } from "next-mdx-remote";
 import Prismic from "@prismicio/client";
 import { RichText } from "prismic-reactjs";
 import { serialize } from "next-mdx-remote/serialize";
+import { useMobileView } from "@/lib/utils";
 import { Box, Heading, SimpleGrid } from "@chakra-ui/react";
 
 const Page = (props: any) => {
@@ -27,7 +28,11 @@ const Page = (props: any) => {
       >
         {RichText.asText(props.post.data.subtitle)}
       </Heading>
-      <SimpleGrid templateColumns="repeat(3, minmax(auto, 55%))">
+      <SimpleGrid
+        templateColumns={
+          useMobileView() ? "100%" : "repeat(3, minmax(auto, 55%))"
+        }
+      >
         <Box />
         <Box>
           <Serializer>
